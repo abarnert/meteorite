@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Meteorite" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="Debug/bin/Meteorite" prefix_auto="1" extension_auto="1" />
+				<Option object_output="Debug/obj/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Option parameters="-r test.mkv" />
+				<Compiler>
+					<Add option="-Wshadow" />
+					<Add option="-Wundef" />
+					<Add option="-pedantic" />
+					<Add option="-Wextra" />
+					<Add option="-Wall" />
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="Release/bin/Meteorite" prefix_auto="1" extension_auto="1" />
+				<Option object_output="Release/obj/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Option parameters="mkvmerge.mkv" />
+				<Compiler>
+					<Add option="-march=athlon64" />
+					<Add option="-O3" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-pedantic" />
+			<Add option="-Wextra" />
+			<Add option="-Wall" />
+			<Add option="`wx-config --cflags`" />
+		</Compiler>
+		<Linker>
+			<Add option="`wx-config --libs`" />
+		</Linker>
+		<Unit filename="resources/resource.rc" />
+		<Unit filename="src/MeteoriteApp.cpp" />
+		<Unit filename="src/MeteoriteApp.h" />
+		<Unit filename="src/MeteoriteGUI.cpp" />
+		<Unit filename="src/MeteoriteGUI.h" />
+		<Unit filename="src/MeteoriteMain.cpp" />
+		<Unit filename="src/MeteoriteMain.h" />
+		<Unit filename="src/endian.h" />
+		<Unit filename="src/meteorite.cpp" />
+		<Unit filename="src/meteorite.h" />
+		<Extensions>
+			<envvars />
+			<code_completion />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

@@ -948,10 +948,11 @@ subElement* Meteorite::TreeParserChunkMaster( char *bfr, unsigned length, uint64
 					}
 				else{
 					cerr << "Error : No token found on TreeParserChunk();" << endl;
-				}
+					}
 				}
 			else{
 				cerr << "Error on TreeParserChunkMaster();" << endl;
+				break;
 				}
 			}
 		return el_ptr;

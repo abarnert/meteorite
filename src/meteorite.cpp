@@ -1948,7 +1948,11 @@ bool Meteorite::Repair( string source, string target ){
 			TreeParserPrint( root );
 			string a = "ABCDEFGH";
 			cout << "Source: " << source << endl;
+			#if __WXMSW__
+			int found = source.find_last_of('\\');
+			#else
 			int found = source.find_last_of('/');
+			#endif
 			string output;
 			if( target.empty() )
 				output = source.substr(0,found+1) + string("Meteorite.") + source.substr(found+1);
@@ -1974,10 +1978,10 @@ bool Meteorite::ClusterSectionRepair( subElement* root, uint64_t& read_from, uin
 	int ClusterStart =  read_from;
 	cout << "First Cluster located at: " << ClusterStart << endl;
 
-	ofstream outfile( output.c_str(), ios::binary );
+	ofstream outfile( output.c_str(), ios::binary| ios::trunc );
 	if( !outfile.is_open() ){
-		cerr << "Cannot create file meteorite.mkv" << endl;
-		return false;
+		cerr << "Cannot create file " << output.c_str() << endl;
+		exit(1);
 		}
 
 	char *buffer = new char [read_from+1];

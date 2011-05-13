@@ -45,6 +45,7 @@
 		<Linker>
 			<Add option="`wx-config --libs`" />
 		</Linker>
+		<Unit filename="makefile" />
 		<Unit filename="src/MeteoriteApp.cpp" />
 		<Unit filename="src/MeteoriteApp.h" />
 		<Unit filename="src/MeteoriteGUI.cpp" />

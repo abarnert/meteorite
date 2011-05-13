@@ -2,8 +2,8 @@ WXCONFIG = wx-config
 CPP = `$(WXCONFIG) --cxx`
 CXXFLAGS= `$(WXCONFIG) --cxxflags` -O2
 LDFLAGS = `$(WXCONFIG) --libs`
-#RC = `$(WXCONFIG) --rescomp`
-RC = x86_64-w64-mingw32-windres --define WX_CPU_AMD64
+RC = `$(WXCONFIG) --rescomp`
+#RC = x86_64-w64-mingw32-windres --define WX_CPU_AMD64
 RCFLAGS = `$(WXCONFIG) --cxxflags`
 MSGFMT = msgfmt
 

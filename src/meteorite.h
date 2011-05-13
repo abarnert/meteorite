@@ -42,7 +42,7 @@
 #ifndef _meteorite_h_
 #define _meteorite_h_
 
-#define METEORITE_VERSION "0.10 Beta"
+#define METEORITE_VERSION "0.11 Beta"
 
 using namespace std;
 

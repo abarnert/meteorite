@@ -1,3 +1,3 @@
-aaaa ICON "resources/Meteorite.ico"
+aaaa ICON "resources/meteorite.ico"
 
 #include <wx/msw/wx.rc>

@@ -21,8 +21,8 @@
 #include <wx/menu.h>
 #include <wx/url.h>
 #include <wx/msgdlg.h>
-#include "../resources/Meteorite-Logo.hpp"
-#include "../resources/Meteorite.xpm"
+#include "../resources/meteorite-logo.hpp"
+#include "../resources/meteorite.xpm"
 
 class MeteoriteDialog: public MeteoriteGUI, Meteorite, wxThreadHelper, wxFileDropTarget
 {

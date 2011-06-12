@@ -32,10 +32,10 @@ $(EXECUTABLE): $(OBJECTS)
 win: $(SOURCES) $(RESOURCES) $(EXECUTABLE_WIN)
 
 $(EXECUTABLE_WIN): $(OBJECTS) $(RESOURCE_OBJ)
-	$(CPP) $(OBJECTS) $(RESOURCE_OBJ) $(LDFLAGS) -static-libgcc -o $@
+	$(CPP) $(OBJECTS) $(RESOURCE_OBJ) $(LDFLAGS) -static-libstdc++ -static-libgcc -o $@
 
 %.o : %.rc
-	$(RC) $(RCFLAGS) $(CXXFLAGS)  $< -o $@
+	$(RC) $(RCFLAGS) $< -o $@
 
 .cpp.o:
 	$(CPP) $(CXXFLAGS) -c $< -o $@

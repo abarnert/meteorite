@@ -1965,6 +1965,9 @@ bool Meteorite::Repair( string source, string target ){
 				//wxRemoveFile( output );
 			//ClusterSectionRepair( root, read_from, SegmentStart, SegmentSize, myfile, "/mnt/GaMeR/meteorite.mkv" );
 			}
+		else{
+			read_from++;
+			}
 
 		}//while
 	delete buffer;

@@ -2045,6 +2045,11 @@ bool Meteorite::ClustersCopier( subElement* root, uint64_t SegmentStart, uint64_
 
 	uint64_t LastClusterEnd = 0;
 	subElement* MetaSeek_ptr= dynamic_cast< subElement* >(Get( root, IDof("SeekHead") ));
+	if ( MetaSeek_ptr == NULL ){
+		//Error here, what did I miss?
+		wxMessageBox( wxT("Error : There is no SeekHead located at file.\nProbably your file heavly damaged or using new versions of Matroska,\nthat doesn't supported by this program, yet.."), wxT("Different Matroska Format Detected"), wxOK|wxCENTER );
+		return false;
+		}
 	for( unsigned i = 0 ; i < MetaSeek_ptr->data.size() ; i++){
 		subElement* processor = dynamic_cast< subElement*>( MetaSeek_ptr->data.at(i) );
 		if( processor->data.at(1)->ID == IDof("SeekPosition") ){

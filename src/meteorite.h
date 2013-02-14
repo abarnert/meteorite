@@ -182,7 +182,7 @@ struct Block{		//Block structure for read/store block informations. Structure do
 	lace Lacing;
 	};
 
-#define bfr_size 10*1024*1024	//10MB buffer
+#define bfr_size 64*1024*1024	//64MB buffer
 class Meteorite{	//The main class of the poject_Meteorite
 	public:
 		Meteorite( wxGauge *WxGauge=NULL );

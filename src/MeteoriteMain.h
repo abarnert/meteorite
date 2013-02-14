@@ -24,7 +24,7 @@
 #include "../resources/meteorite-logo.hpp"
 #include "../resources/meteorite.xpm"
 
-class MeteoriteDialog: public MeteoriteGUI, Meteorite, wxThreadHelper, wxFileDropTarget
+class MeteoriteDialog: public MeteoriteGUI, Meteorite, wxThreadHelper
 {
     public:
         MeteoriteDialog(wxDialog *dlg);
@@ -33,7 +33,7 @@ class MeteoriteDialog: public MeteoriteGUI, Meteorite, wxThreadHelper, wxFileDro
         virtual void OnClose(wxCloseEvent& event);
         virtual void OnQuit(wxCommandEvent& event);
         virtual void OnAbout(wxCommandEvent& event);
-        virtual bool OnDropFiles(wxCoord x, wxCoord y, const wxArrayString& filenames);
+//        virtual bool OnDropFiles(wxCoord x, wxCoord y, const wxArrayString& filenames);
 		void *Entry();
 		void OnResize();
 		void OnMouseRight( wxMouseEvent& event );
@@ -41,6 +41,16 @@ class MeteoriteDialog: public MeteoriteGUI, Meteorite, wxThreadHelper, wxFileDro
 		wxArrayString FilesToRepair;
 		wxMutex m_mutex;
 		DECLARE_EVENT_TABLE();
+
+	class MeteoriteDropTarget: public wxFileDropTarget
+	{
+	    public:
+		MeteoriteDropTarget(MeteoriteDialog *dlg);
+		~MeteoriteDropTarget();
+	    private:
+		virtual bool OnDropFiles(wxCoord x, wxCoord y, const wxArrayString& filenames);
+		MeteoriteDialog *const m_dialog;
+	};
 };
 
 #endif // METEORITEMAIN_H

@@ -220,7 +220,7 @@ short ID_Element::IDSize(){
 		else return 0;
 		}
 void ID_Element::print( bool endline ){ cout << name << (endline ? "\n" : "" ); }
-void ID_Element::write( ofstream& ){}	//Not ımplemented because of virtual class
+void ID_Element::write( ofstream& ){}	//Not implemented because of virtual class
 unsigned ID_Element::Size( void ){return -1;}
 ID_Element::~ID_Element(){}
 
@@ -348,13 +348,13 @@ subElement::subElement( string name, uint64_t location ) : ID_Element( name, loc
 subElement::subElement( ID_Element id) : ID_Element( id ){ type = subElements; }
 void subElement::print(bool endline){ cout << name << ": size " << Size() << (endline ? "\n" : "" ); }
 unsigned subElement::Size( void ){
-	int sz =  0;
+	unsigned sz =  0;
 	for( vector<ID_Element*>::iterator it = data.begin() ; it != data.end(); it++ )
 		sz += (*it)->Size();
 	return IDSize()+EBMLsize(uIntegertoEBML(sz))+sz;
 	}
 unsigned subElement::subsize( void ){
-	int sz =  0;
+	unsigned sz =  0;
 	if( data.size() != 0 )
 		for( vector<ID_Element*>::iterator it = data.begin() ; it != data.end(); it++ )
 			sz += (*it)->Size();
@@ -363,8 +363,7 @@ unsigned subElement::subsize( void ){
 //This function is NOT recursive!
 void subElement::write( ofstream &outfile ){
 	outfile.write( reinterpret_cast<char*>(&make_bigendian(ID) ), IDSize() );
-	int sz =  0;
-	int z = 0;
+	unsigned sz=0, z=0;
 	ID_Element *processor;	//Needed to use for debugging.
 	for( vector<ID_Element*>::iterator it = data.begin() ; it != data.end(); it++ ){
 		//sz += (*it)->size();	//non debugged old constant
@@ -858,6 +857,10 @@ subElement* Meteorite::TreeParser( char* a ){	//Parsa a buffer by TreeParser(tm)
 						p32 == IDof( "Chapters" ) or
 						p32 == IDof( "Tags" ) ){
 				unsigned size = EBMLtouInteger( buffer+i , &i);	//Get token size
+				if (size+i > bfr_size){
+					cerr << "TreeParser() buffer too small: " << size << endl;
+					break;
+					}
 				myfile.seekg( read_from );
 				myfile.read( buffer, size+i );
 
@@ -888,11 +891,11 @@ subElement* Meteorite::TreeParser( char* a ){	//Parsa a buffer by TreeParser(tm)
 				read_from += i;
 				}
 			else if( p32 == IDof( "Cluster" ) ){	//Skipping clusters without Segments!
-				int size = EBMLtouInteger( buffer+i, &i );
+				unsigned size = EBMLtouInteger( buffer+i, &i );
 				read_from += size+i;
 				}
 			}
-		delete buffer;
+		delete[] buffer;
 		return ret;
 		}
 
@@ -948,6 +951,7 @@ subElement* Meteorite::TreeParserChunkMaster( char *bfr, unsigned length, uint64
 					}
 				else{
 					cerr << "Error : No token found on TreeParserChunk();" << endl;
+					break;
 					}
 				}
 			else{
@@ -1120,7 +1124,7 @@ bool Meteorite::CheckCluster( char *bfr ){	//Checks cluster if its broken or not
 					}
 				else{
 					uint32_t a = make_bigendian( *reinterpret_cast<uint32_t*>( bfr+i ));
-					cout << "ID token \"0x" << hex << a << dec << "\" not found on "  << DB.Cluster.idvector.at(0)->name
+					cout << endl << "ID token \"0x" << hex << a << dec << "\" not found on "  << DB.Cluster.idvector.at(0)->name
 					 <<" list. Probably broken cluster. " << endl;
 					return false;
 					}
@@ -1422,7 +1426,7 @@ void Meteorite::ClusterAnalysis( char *bfr, unsigned defaultduration, uint64_t c
 									if(cluster_nanotimecode == 0 and BlockCount == 1)
 										CT->data = bl.TimeCode;
 									else
-										CT->data = rint((ClusterLocalDuration + cluster_nanotimecode) / 1000000.0);
+										CT->data = (uint64_t)rint((ClusterLocalDuration + cluster_nanotimecode) / 1000000.0);
 									//CueTimeCodes.push_back( rint((ClusterLocalDuration + cluster_nanotimecode) / 1000000.0) );
 									// TODO (death#1#): ERRORR!! 1000.0000 need read from tracks...
 									subElement *CTP = new subElement( "CueTrackPositions" );
@@ -1530,7 +1534,7 @@ uint64_t Meteorite::ClusterDuration( subElement* el_ptr, unsigned defaultduratio
 					bl.Duration = dynamic_cast< uintElement* >(BlockGroup_ptr->data.at(j))->data;
 				}
 			if( bl.TrackNum == TrackNo )
-				ClusterDuration += (bl.Duration==0 ? defaultduration : (rint(bl.Duration / (defaultduration / 1000000.0))*defaultduration ));
+				ClusterDuration += (bl.Duration==0 ? defaultduration : (uint64_t)(rint(bl.Duration / (defaultduration / 1000000.0))*defaultduration ));
 			}
 		else if( el_ptr->data.at(i)->type == subElements ){
 			cout << "ClusterDuration(): el_ptr->data.at(i)->type == subElements " << endl;
@@ -1580,7 +1584,7 @@ void Meteorite::ClusterBlocksTimeRepair( subElement* root, subElement* el_ptr ){
 						bl.Frames = *reinterpret_cast< uint8_t* >( bfr+i+3 );
 						}
 
-					bl.TimeCode = rint(ClusterTrackDuration[bl.TrackNum] / 1000000.0);
+					bl.TimeCode = (uint64_t)rint(ClusterTrackDuration[bl.TrackNum] / 1000000.0);
 					*reinterpret_cast< int16_t* >( bfr+p ) = make_bigendian( bl.TimeCode );//update Blocksbuffer Tcode
 					ClusterTrackDuration[bl.TrackNum] += GetDefaultFrameDuration( root, bl.TrackNum);
 					}
@@ -1701,13 +1705,13 @@ void Meteorite::Generate_CueTimeCodes( vector< Block >& vb, subElement* Cues_ptr
 	for( vector< Block >::iterator it= vb.begin() ; it != vb.end() ; it++ )
 		if( it->TrackNum == TrackNo ){
 //			it->Print();
-			uint64_t CueTime = rint((ClusterLocalDuration + ClusterNanoTimeCode) / 1000000.0);
+			uint64_t CueTime = (uint64_t)rint((ClusterLocalDuration + ClusterNanoTimeCode) / 1000000.0);
 			if( it->KeyFlag
 				or (ClusterNanoTimeCode==0 and ClusterLocalDuration==0) ){	//Forces first Video Block to keyflag
 				subElement* CuePoint_ptr = MakeCuePoint( ClusterPosition, TrackNo, CueTime );
 				Cues_ptr->data.push_back( CuePoint_ptr );
 				}
-			ClusterLocalDuration += (it->Duration==0 ? DefaultFrameDuration : (rint(it->Duration / (DefaultFrameDuration / 1000000.0))*DefaultFrameDuration ));
+			ClusterLocalDuration += (it->Duration==0 ? DefaultFrameDuration : (uint64_t)(rint(it->Duration / (DefaultFrameDuration / 1000000.0))*DefaultFrameDuration ));
 			}
 //	return minimumtime;
 
@@ -1873,10 +1877,10 @@ bool Meteorite::Repair( string source, string target ){
 	tmp_ptr = root;
 
 	myfile.seekg(0, ios::end);
-	uint64_t filelenght = myfile.tellg();
+	uint64_t filelength = myfile.tellg();
 
-	while(( read_from < ebml_size+SegmentSize+4+4 ) and !myfile.eof() and read_from < filelenght ){
-		if( not update_gauge( rint( (100*read_from) / filesize) ))
+	while(( read_from < ebml_size+SegmentSize+4+4 ) and !myfile.eof() and read_from < filelength ){
+		if( not update_gauge( (uint64_t)rint( (100*read_from) / filesize) ))
 			return 0;
 		myfile.seekg( read_from );
 		myfile.read( buffer, 16 );
@@ -1896,7 +1900,11 @@ bool Meteorite::Repair( string source, string target ){
 					p32 == IDof( "Attachments" ) or
 					p32 == IDof( "Chapters" ) or
 					p32 == IDof( "Tags" )){
-			int size = EBMLtouInteger( buffer+i, &i );
+			unsigned size = EBMLtouInteger( buffer+i, &i );
+			if (size+i > bfr_size) {
+				cerr << "Repair() buffer too small: " << size << endl;
+				break;
+				}
 			myfile.seekg( read_from );
 			myfile.read( buffer, size+i );
 			ID_Element *processor = FindElementID( buffer );
@@ -1921,11 +1929,11 @@ bool Meteorite::Repair( string source, string target ){
 			read_from += size+i;
 			}
 		else if( p32 == IDof( "Cues" ) ){
-			int size = EBMLtouInteger( buffer+i, &i );
+			unsigned size = EBMLtouInteger( buffer+i, &i );
 			read_from += size+i;
 			}
 		else if( p32 == IDof( "Tracks" ) ){
-			int size = EBMLtouInteger( buffer+i, &i );
+			unsigned size = EBMLtouInteger( buffer+i, &i );
 			myfile.seekg( read_from );
 			myfile.read( buffer, size+i );
 			read_from += size+i;
@@ -1970,7 +1978,7 @@ bool Meteorite::Repair( string source, string target ){
 			}
 
 		}//while
-	delete buffer;
+	delete[] buffer;
 	delete root;
 	return true;
 	}
@@ -1991,7 +1999,7 @@ bool Meteorite::ClusterSectionRepair( subElement* root, uint64_t& read_from, uin
 	myfile.seekg(0);
 	myfile.read( buffer, read_from );
 	outfile.write( buffer, read_from );
-	delete buffer;
+	delete[] buffer;
 
 	vector<uint64_t> seeks;
 
@@ -2023,7 +2031,7 @@ bool Meteorite::ClusterSectionRepair( subElement* root, uint64_t& read_from, uin
 
 	subElement* Segment_ptr = dynamic_cast< subElement* >( Get( root , IDof("Segment")) );
 
-	Repair_Info_Duration( Segment_ptr, Duration );//need to be before Metaseek because of change of Info lenght
+	Repair_Info_Duration( Segment_ptr, Duration );//need to be before Metaseek because of change of Info length
 	Regenerate_MetaSeek( Segment_ptr, SegmentStart, NewSeekHeadPos, NewCueTimePos);
 
 	Repair_Segment_Size( root, myfile, outfile );
@@ -2106,7 +2114,7 @@ bool Meteorite::ClustersCopier( subElement* root, uint64_t SegmentStart, uint64_
 			infile.seekg( read_from );
 			infile.read( buffer, size+i );
 			if( not CheckCluster( buffer )){
-				cout << "Corrupted cluster at " << read_from << " ,recovering..." << endl;
+				cout << "Corrupted cluster at " << read_from << ", recovering..." << endl;
 				}
 			unsigned rsize = infile.gcount();
 			if( rsize != size+i )
@@ -2123,20 +2131,20 @@ bool Meteorite::ClustersCopier( subElement* root, uint64_t SegmentStart, uint64_
 			vector<Block> vb = ClusterBlocksAnalysis( cluster, root );//Generate Block hashes
 
 			///Here 3 different method I tried to success on guessing exact time code for Clusters but I failed at all.
-			///So, Don't expect some reference code exactly correct. It has dıfference by 1 microsecconds
+			///So, Don't expect some reference code exactly correct. It has difference by 1 microsecconds
 			///I think Matroska implementation is faulty but mine :D
 
 			if(0){///Method : Calculation via frame numbers
 				int a=0, v=0;
 				for( vector< Block >::iterator it= vb.begin() ; it != vb.end() ; it++ )
 					if( it->TrackNum == AudioTrackNo ){
-						Block z = *it;
+						Block z = *it; //for just debugging
 						//total_duration += (it->Duration==0 ? DefaultFrameDuration : (rint(it->Duration / (DefaultFrameDuration / 1000000.0))*DefaultFrameDuration ));
 						a += it->Frames;
 						}
 					else if( it->TrackNum == VideoTrackNo ){
-						Block z = *it;
-						v += (it->Duration==0 ? 1 : rint(it->Duration / (DefaultVideoFrameDuration / 1000000.0)) );
+						Block z = *it; //for just debugging
+						v += (it->Duration==0 ? 1 : (uint64_t)rint(it->Duration / (DefaultVideoFrameDuration / 1000000.0)) );
 						}
 
 				ta +=a;
@@ -2166,14 +2174,14 @@ bool Meteorite::ClustersCopier( subElement* root, uint64_t SegmentStart, uint64_
 				LastClusterVideoTimeCode += ClusterLocalVideoDuration;// + ClusterVideoMinimumTimeElement*1000000;/
 				LastClusterAudioTimeCode += ClusterLocalAudioDuration;// + ClusterAudioMinimumTimeElement*1000000;
 				LastClusterTimeCode = min( LastClusterVideoTimeCode, LastClusterAudioTimeCode );
-				LastClusterTimeCodeMsec = rint(LastClusterTimeCode/1000000.0);
+				LastClusterTimeCodeMsec = (uint64_t)rint(LastClusterTimeCode/1000000.0);
 			}
 
 			uint64_t ClusterLocalDuration = ClusterDuration( vb, DefaultVideoFrameDuration, VideoTrackNo );
 			int64_t ClusterMinimumTimeElement = ClusterMinimumBlockTime( vb, VideoTrackNo );
 
 			if(LastClusterTimeCode == 0 and ClusterMinimumTimeElement > 0 )	//Sometime, video start later. This fixes duration of first cluster
-				ClusterLocalDuration += rint((DefaultVideoFrameDuration*ClusterMinimumTimeElement*1000000.0)/DefaultVideoFrameDuration);
+				ClusterLocalDuration += (uint64_t)rint((DefaultVideoFrameDuration*ClusterMinimumTimeElement*1000000.0)/DefaultVideoFrameDuration);
 
 			/// New Cluster Timecode = LastCluster TCode + LClusterDuration() + ( Tcode of Current Cluster )
 			/// ClusterDuration()  = LCluster Block MaxTcode + duration or Default Duration
@@ -2183,7 +2191,7 @@ bool Meteorite::ClustersCopier( subElement* root, uint64_t SegmentStart, uint64_
 
 
 			uintElement *tc = dynamic_cast<uintElement*>( Get( cluster, IDof("Timecode") ));
-			tc->data = rint(ClusterTimeCode / 1000000.0);
+			tc->data = (uint64_t)rint(ClusterTimeCode / 1000000.0);
 
 			Generate_CueTimeCodes( vb, CueTCodes,	//Add KeyFrames to Cues Tree
 								ClusterPosition, ClusterTimeCode, DefaultVideoFrameDuration, VideoTrackNo );
@@ -2291,7 +2299,7 @@ bool Meteorite::ClustersCopier( subElement* root, uint64_t SegmentStart, uint64_
 					}
 
 				else if( !(j % (1024*1024) ))
-					cout << "Searching at: " << ((read_from + j)/(1024*1024)) << " MB\r";
+					cout << endl << "Searching at: " << ((read_from + j)/(1024*1024)) << " MB\r";
 				else if( j == bfr_size - 5 ){
 					read_from += j;
 					break;
@@ -2304,7 +2312,7 @@ bool Meteorite::ClustersCopier( subElement* root, uint64_t SegmentStart, uint64_
 			return false;
 			}
 		}
-	delete buffer;
+	delete[] buffer;
 	Duration = LastClusterTimeCode;
 	return true;
 }
@@ -2404,7 +2412,7 @@ subElement* Meteorite::Regenerate_MetaSeek( subElement* Segment_ptr, uint64_t Se
 		SeekID_ptr->data = new char [4];
 		memcpy( SeekID_ptr->data, &make_bigendian((Segment_ptr->data.at(i)->ID)), 4 );
 		SeekID_ptr->datasize =4;
-		int sz = 200; //assuming metaseek table is max of 200 bytes.
+		unsigned sz = 200; //assuming metaseek table is max of 200 bytes.
 		for( unsigned j = 1 ; j < i ; j++ ){
 			cout << "Segment_ptr->data.at(" << j << ")->name : " << Segment_ptr->data.at(j)->name << endl;
 			cout << "Segment_ptr->data.at(" << j << ")->size() : " << Segment_ptr->data.at(j)->Size() << endl;

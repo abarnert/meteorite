@@ -25,11 +25,11 @@ END_EVENT_TABLE()
 MeteoriteDialog::MeteoriteDialog(wxDialog *dlg)
     : MeteoriteGUI(dlg), Meteorite( WxGauge )
 {
-	SetDropTarget( this );
+	SetDropTarget( new MeteoriteDropTarget(this)  );
 	wxMemoryInputStream png_stream( meteorite_logo, sizeof(meteorite_logo));
 	wxBitmap the_Logo( wxImage(png_stream, wxBITMAP_TYPE_PNG)) ;
 	m_bitmap_logo->SetBitmap( the_Logo );
-	m_bitmap_logo->SetDropTarget( this );
+	m_bitmap_logo->SetDropTarget( new MeteoriteDropTarget(this)  );
 	VersionCheck();
 
 #ifdef __WXMSW__
@@ -46,8 +46,8 @@ MeteoriteDialog::MeteoriteDialog(wxDialog *dlg)
 
 MeteoriteDialog::~MeteoriteDialog()
 {
-	m_bitmap_logo->SetDropTarget( NULL );
-	SetDropTarget( NULL );
+//	m_bitmap_logo->SetDropTarget( NULL );
+//	SetDropTarget( NULL );
 }
 
 void MeteoriteDialog::OnClose(wxCloseEvent &event)
@@ -143,18 +143,23 @@ void *MeteoriteDialog::Entry(){
 	m_mutex.Unlock();
 	}
 
-bool MeteoriteDialog::OnDropFiles(wxCoord x, wxCoord y, const wxArrayString& filenames){
-	if( m_mutex.TryLock() == wxMUTEX_BUSY ){
+MeteoriteDialog::MeteoriteDropTarget::MeteoriteDropTarget(MeteoriteDialog *dlg)
+    : m_dialog(dlg) {}
+
+MeteoriteDialog::MeteoriteDropTarget::~MeteoriteDropTarget() {}
+
+bool MeteoriteDialog::MeteoriteDropTarget::OnDropFiles(wxCoord x, wxCoord y, const wxArrayString& filenames){
+	if( m_dialog->m_mutex.TryLock() == wxMUTEX_BUSY ){
 		wxBell();
 		return FALSE;
 		}
 	int nFiles = filenames.GetCount();
 	for ( int n = 0; n < nFiles; n++ )
 		if ( wxFile::Exists( filenames.Item(n).c_str() ))
-			FilesToRepair.Add( filenames.Item(n) );
-	wxThreadHelper::Create();
-	m_gauge->Show();
-	GetThread()->Run();
+			m_dialog->FilesToRepair.Add( filenames.Item(n) );
+	m_dialog->wxThreadHelper::Create();
+	m_dialog->m_gauge->Show();
+	m_dialog->GetThread()->Run();
 	return TRUE;
 	}
 

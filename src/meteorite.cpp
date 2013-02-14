@@ -1227,7 +1227,7 @@ inline bool Meteorite::IsKeyFrame( char *data, unsigned size, char *four_cc ){ /
 			int avcflag = 0;
 			while( pos+4 < size ){
 				data_nextnalu = data+pos;
-				avcflag |= 1 << (data_nextnalu[4] & 0x0F)-1;
+				avcflag |= (1 << ((data_nextnalu[4] & 0x0F)-1));
 // TODO (death#1#): bigendian				nalu_len = make_bigendian( *reinterpret_cast< uint32_t*>( data_nextnalu ));
 				pos += nalu_len+4;
 				}
@@ -1781,17 +1781,6 @@ void Meteorite::fourcc_finder( subElement* root ){
 		}
 	}
 uint32_t Meteorite::GetDefaultFrameDuration( subElement* root, unsigned TrackNum ){
-//	vector<uint32_t> a;
-//	a.push_back( IDof("Tracks") );
-//	a.push_back( IDof("DefaultDuration") );
-//	uintElement *defdur_p = dynamic_cast<uintElement*>(Get( root, a ));
-//	a.clear();
-//	if( defdur_p not_eq NULL)
-//		return defdur_p->data;
-//	else{
-//		cerr << "Error : No Default Duration detected!" << endl;
-//		exit(1);
-//		}
 	vector<ID_Element*> a;
 	TreeSearchID( root, IDof("TrackEntry"), a );
 	for( vector< ID_Element* >::iterator it = a.begin() ; it != a.end() ; it++ ){
@@ -1809,15 +1798,10 @@ uint32_t Meteorite::GetDefaultFrameDuration( subElement* root, unsigned TrackNum
 				}
 			}
 		}
-
-//	a.clear();
-//	if( defdur_p not_eq NULL)
-//		return defdur_p->data;
-//	else{
-//		cerr << "Error : No Default Duration detected!" << endl;
-//		exit(1);
-//		}
-
+	else{
+		cerr << "Error : No Default Duration detected!" << endl;
+		exit(1);
+		}
 	}
 int Meteorite::GetTrackCount( subElement* root){
 	vector<ID_Element*> a;
@@ -2325,7 +2309,7 @@ subElement* Meteorite::Regenerate_SeekHead( vector <uint64_t> seeks ){
 		SeekID->data = new char[4];
 		SeekID->data[0] = 0x1F;
 		SeekID->data[1] = 0x43;
-		SeekID->data[2] = static_cast<char>(0xB6);
+		SeekID->data[2] = 0xB6;
 		SeekID->data[3] = 0x75;
 		SeekID->datasize =4;
 		uintElement *SeekPosition = new uintElement( ID_Element( "SeekPosition" ) );

@@ -55,9 +55,14 @@ should end with a line similar to this:
     |-Void: 00000000000000000000: size 5035
 
 After the output has stopped, quit the app, to make sure the
-file is flushed and closed, and now it should play. Note that,
-at least on Mac, you cannot quit with Cmd-Q; just close the
-window.
+file is flushed and closed, and now it should play. (If you
+attempt to quit before it's done, it will probably segfault
+and leave a partial output file behind.)
+
+Note that on the Mac version, the menu bar is broken. This
+means you can't quit from the `Meteorite` menu, or with the 
+usual Cmd-Q shortcut. (Although, oddly, there is a context
+menu that works.) Just close the window to quit.
 
 Sometimes, at completion, the app hangs. Killing it (`^C` from
 the terminal, or `kill` (no `-9` needed), or your favorite GUI

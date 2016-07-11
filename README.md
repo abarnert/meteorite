@@ -6,8 +6,8 @@ This is a fork of an abandoned (I believe) project from SourceForge.
 See [Documentation from original website](#documentation-from-original-website)
 below for full details.
 
-* Copyright (C) 2016 Andrew Barnert
-* Copyright (C) 2009 Erdem U. Altinyurt
+* Version 0.20 Copyright (C) 2016 Andrew Barnert
+* Version 0.12 Copyright (C) 2009 Erdem U. Altinyurt
 * Licensed under GPL version 2.0 or later. See docs/GPL.txt for details.
 
 #Build
@@ -55,7 +55,9 @@ should end with a line similar to this:
     |-Void: 00000000000000000000: size 5035
 
 After the output has stopped, quit the app, to make sure the
-file is flushed and closed, and now it should play.
+file is flushed and closed, and now it should play. Note that,
+at least on Mac, you cannot quit with Cmd-Q; just close the
+window.
 
 Sometimes, at completion, the app hangs. Killing it (`^C` from
 the terminal, or `kill` (no `-9` needed), or your favorite GUI

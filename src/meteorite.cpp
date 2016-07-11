@@ -1797,10 +1797,10 @@ uint32_t Meteorite::GetDefaultFrameDuration( subElement* root, unsigned TrackNum
 					}
 				}
 			}
-		}
-	else{
-		cerr << "Error : No Default Duration detected!" << endl;
-		exit(1);
+		else{
+			cerr << "Error : No Default Duration detected!" << endl;
+			exit(1);
+			}
 		}
 	}
 int Meteorite::GetTrackCount( subElement* root){

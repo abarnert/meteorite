@@ -1,4 +1,5 @@
 # Copyright (c) 2006-2009 Erdem U. Altinyurt
+# Copyright (c) 2016 Andrew Barnert
 # Thanks for oc2pus
 # This file and all modifications and additions to the pristine
 # package are under the same license as the package itself.
@@ -11,7 +12,7 @@
 
 Name:			meteorite
 Summary:		A program to repair broken MKV file streams
-Version:		0.11
+Version:		0.20
 Release:		1
 License:		GPL
 Group:			Productivity/Multimedia/Video/Editors and Convertors
@@ -81,3 +82,6 @@ EOF
 %changelog
 * Sat May 14 2011 Erdem U. Altinyurt <spamjunkeater@gmail.com> - 0.1-0
 - Initial Release
+
+* Mon Jul 11 2016 Andrew Barnert 0.20
+- Revive dead project, get it building again.

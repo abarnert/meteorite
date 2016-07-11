@@ -84,7 +84,7 @@ mac: all
  	\t<string>$(EXECUTABLE)</string>\n\
 \
 	\t<key>CFBundleGetInfoString</key>\n\
-	\t<string>$(EXECUTABLE) v0.11</string>\n\
+	\t<string>$(EXECUTABLE) v0.20</string>\n\
 \
 	\t<key>CFBundleIconFile</key>\n\
 	\t<string>$(EXECUTABLE).icns</string>\n\
@@ -93,7 +93,7 @@ mac: all
  	\t<string>net.sourceforge.divfixpp</string>\n\
 \
   	\t<key>CFBundleShortVersionString</key>\n\
- 	\t<string>v0.11</string>\n\
+ 	\t<string>v0.20</string>\n\
 \
   	\t<key>CFBundleInfoDictionaryVersion</key>\n\
  	\t<string>6.0</string>\n\
@@ -111,7 +111,7 @@ mac: all
  	\t<string>1.0.0</string>\n\
 \
 	\t<key>DRURLs</key>\n\
-	\t<string>http://divfixpp.sourceforge.net</string>\n\
+	\t<string>https://github.com/abarnert/meteorite</string>\n\
 \
 	\t<key>NSMainNibFile</key>\n\
 	\t<string>$(EXECUTABLE)</string>\n\
@@ -120,7 +120,7 @@ mac: all
 	\t<string>NSApplication</string>\n\
 \
   	\t<key>NSHumanReadableCopyright</key>\n\
- 	\t<string> (c) 2009-2011, Erdem U. Altinyurt</string>\n\
+ 	\t<string> (c) 2009-2016, Erdem U. Altinyurt, Andrew Barnert</string>\n\
 \
 </dict>\n\
 </plist>\n\n" > $(EXECUTABLE).app/Contents/Info.plist

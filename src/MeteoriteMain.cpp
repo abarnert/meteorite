@@ -71,13 +71,13 @@ void MeteoriteDialog::OnQuit(wxCommandEvent &event)
 	AllAbout.SetIcon( wxc );
 	AllAbout.SetName(_T("Meteorite"));
     AllAbout.SetVersion( _T(METEORITE_VERSION) );
-    AllAbout.SetDescription(_("project_Meteorite is a video repair utility for MKV/Matroska files."));
-    AllAbout.SetCopyright(_T("(C) 2009 Erdem U. Altinyurt"));
+    AllAbout.SetDescription(_("Meteorite is a video repair utility for MKV/Matroska files."));
+    AllAbout.SetCopyright(_T("(C) 2009 Erdem U. Altinyurt, (C) 2016 Andrew Barnert"));
 
-    AllAbout.SetWebSite( _T("http://meteorite.sourceforge.net"));
+    AllAbout.SetWebSite( _T("https://github.com/abarnert/meteorite"));
 
 	AllAbout.SetLicense( _T("Meteorite is a video repair utility for MKV/Matroska files.\n"
-             "Copyright (C) 2009  Erdem U. Altunyurt\n"
+             "Copyright (C) 2009  Erdem U. Altunyurt, (C) 2016 Andrew Barnert\n"
              "\n"
              "This program is free software; you can redistribute it and/or\n"
              "modify it under the terms of the GNU General Public License\n"
@@ -93,8 +93,7 @@ void MeteoriteDialog::OnQuit(wxCommandEvent &event)
              "along with this program; if not, write to the Free Software\n"
              "Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.\n"
              "\n"
-             "home:  meteorite.sourceforge.net\n"
-             "email: spamjunkeater@gmail.com\n")
+             "home:  https://github.com/abarnert/meteorite\n")
              );
     wxAboutBox(AllAbout);
 #ifdef __WXMSW__

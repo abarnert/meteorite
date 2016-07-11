@@ -73,11 +73,13 @@ with an open transaction, but it certainly looks suspicious.
 
 #Roadmap
 
-* Version 0.20
-  * Fork original Sourceforge repo.
-  * Get the code compiling again.
-  * Fix the startup crash.
-  * Hopefully fix any other critical bugs.
+* Version 0.20 (done, 2016-07-11)
+ * Fork original Sourceforge repo.
+ * Get the code compiling again.
+ * Fix the startup crash.
+* Version 0.21
+ * Hopefully fix any other critical bugs.
+ * Fix linux build (missing `.desktop` file).
 * Version 0.30
  * Create a version that works as a command-line tool.
  * Fix hang on completion bug.

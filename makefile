@@ -7,16 +7,24 @@ RC = `$(WXCONFIG) --rescomp`
 RCFLAGS = `$(WXCONFIG) --cxxflags`
 MSGFMT = msgfmt
 
-SOURCES= src/MeteoriteApp.cpp\
+SOURCES_GUI= src/MeteoriteApp.cpp\
 			src/MeteoriteGUI.cpp\
 			src/MeteoriteMain.cpp\
 			src/meteoritewx.cpp\
 			src/meteorite.cpp
-OBJECTS=$(SOURCES:.cpp=.o)
-DEPENDS=$(OBJECTS:.o=.d)
+SOURCES_CLI= src/meteorite.cpp \
+			src/meteoritecli.cpp
+OBJECTS_GUI=$(SOURCES_GUI:.cpp=.o)
+DEPENDS_GUI=$(OBJECTS_GUI:.o=.d)
+OBJECTS_CLI=$(SOURCES_CLI:.cpp=.o)
+DEPENDS_CLI=$(OBJECTS_CLI:.o=.d)
+SOURCES=$(SOURCES_GUI) $(SOURCES_CLI)
+OBJECTS=$(OBJECTS_GUI) $(OBJECTS_CLI)
+DEPENDS=$(DEPENDS_GUI) $(DEPENDS_CLI)
 RESOURCES= resources/resource.rc
 RESOURCE_OBJ=$(RESOURCES:.rc=.o)
 EXECUTABLE=meteorite
+EXECUTABLE_CLI=meteorite-cli
 EXECUTABLE_WIN=Meteorite.exe
 
 DESTDIR		=
@@ -25,10 +33,15 @@ BINDIR	    = $(PREFIX)/bin
 DATADIR	    = $(PREFIX)/share
 LOCALEDIR   = $(DATADIR)/locale
 
-all: $(SOURCES) $(EXECUTABLE)
+all: $(SOURCES) $(EXECUTABLE) $(EXECUTABLE_CLI)
 
-$(EXECUTABLE): $(OBJECTS)
-	$(CPP) $(OBJECTS) $(LDFLAGS) -o $@
+cli: $(SOURCES_CLI) $(EXECUTABLE_CLI)
+
+$(EXECUTABLE): $(OBJECTS_GUI)
+	$(CPP) $(OBJECTS_GUI) $(LDFLAGS) -o $@
+
+$(EXECUTABLE_CLI): $(OBJECTS_CLI)
+	$(CPP) $(OBJECTS_CLI) $(LDFLAGS) -o $@
 
 win: $(SOURCES) $(RESOURCES) $(EXECUTABLE_WIN)
 

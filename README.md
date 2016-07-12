@@ -104,6 +104,10 @@ suspicious.
 
 #Roadmap
 
+Note that, as of version 0.30, the app pretty much works well enough
+for me, so I may not get back to work on it again until I get really
+annoyed by the output spam...
+
 * Version 0.20 (done, 2016-07-11)
  * Fork original Sourceforge repo.
  * Get the code compiling again.
@@ -112,10 +116,12 @@ suspicious.
  * Create a version that works as a command-line tool.
 * Version 0.31
  * `getopt_long` to control logging levels, specify output dir, etc.
+ * Windows CLI version.
  * Clean up logging.
- * Clean up CLI output.
  * Fix hang on completion bug.
 * Version 0.32
+ * Check for interactive TTY on CLI startup.
+ * Improve non-interactive CLI output.
  * Add interactive CLI feedback (progress spinner).
 * Version 0.40
  * Add interactive GUI feedback.

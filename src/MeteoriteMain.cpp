@@ -23,7 +23,7 @@ BEGIN_EVENT_TABLE(MeteoriteDialog,wxDialog )
 END_EVENT_TABLE()
 
 MeteoriteDialog::MeteoriteDialog(wxDialog *dlg)
-    : MeteoriteGUI(dlg), Meteorite( WxGauge )
+    : MeteoriteGUI(dlg), MeteoriteWx( WxGauge )
 {
 	SetDropTarget( new MeteoriteDropTarget(this)  );
 	wxMemoryInputStream png_stream( meteorite_logo, sizeof(meteorite_logo));

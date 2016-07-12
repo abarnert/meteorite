@@ -7,15 +7,24 @@ RC = `$(WXCONFIG) --rescomp`
 RCFLAGS = `$(WXCONFIG) --cxxflags`
 MSGFMT = msgfmt
 
-SOURCES= src/MeteoriteApp.cpp\
+SOURCES_GUI= src/MeteoriteApp.cpp\
 			src/MeteoriteGUI.cpp\
 			src/MeteoriteMain.cpp\
+			src/meteoritewx.cpp\
 			src/meteorite.cpp
-OBJECTS=$(SOURCES:.cpp=.o)
-DEPENDS=$(OBJECTS:.o=.d)
+SOURCES_CLI= src/meteorite.cpp \
+			src/meteoritecli.cpp
+OBJECTS_GUI=$(SOURCES_GUI:.cpp=.o)
+DEPENDS_GUI=$(OBJECTS_GUI:.o=.d)
+OBJECTS_CLI=$(SOURCES_CLI:.cpp=.o)
+DEPENDS_CLI=$(OBJECTS_CLI:.o=.d)
+SOURCES=$(SOURCES_GUI) $(SOURCES_CLI)
+OBJECTS=$(OBJECTS_GUI) $(OBJECTS_CLI)
+DEPENDS=$(DEPENDS_GUI) $(DEPENDS_CLI)
 RESOURCES= resources/resource.rc
 RESOURCE_OBJ=$(RESOURCES:.rc=.o)
 EXECUTABLE=meteorite
+EXECUTABLE_CLI=meteorite-cli
 EXECUTABLE_WIN=Meteorite.exe
 
 DESTDIR		=
@@ -24,10 +33,15 @@ BINDIR	    = $(PREFIX)/bin
 DATADIR	    = $(PREFIX)/share
 LOCALEDIR   = $(DATADIR)/locale
 
-all: $(SOURCES) $(EXECUTABLE)
+all: $(SOURCES) $(EXECUTABLE) $(EXECUTABLE_CLI)
 
-$(EXECUTABLE): $(OBJECTS)
-	$(CPP) $(OBJECTS) $(LDFLAGS) -o $@
+cli: $(SOURCES_CLI) $(EXECUTABLE_CLI)
+
+$(EXECUTABLE): $(OBJECTS_GUI)
+	$(CPP) $(OBJECTS_GUI) $(LDFLAGS) -o $@
+
+$(EXECUTABLE_CLI): $(OBJECTS_CLI)
+	$(CPP) $(OBJECTS_CLI) $(LDFLAGS) -o $@
 
 win: $(SOURCES) $(RESOURCES) $(EXECUTABLE_WIN)
 
@@ -42,11 +56,13 @@ $(EXECUTABLE_WIN): $(OBJECTS) $(RESOURCE_OBJ)
 
 install:
 	install -D -m 755 $(EXECUTABLE) $(BINDIR)/$(EXECUTABLE)
+	install -D -m 755 $(EXECUTABLE_CLI) $(BINDIR)/$(EXECUTABLE_CLI)
 	install -D -m 644 resources/$(EXECUTABLE).png $(DATADIR)/pixmaps/$(EXECUTABLE).png
 	install -D -m 644 resources/$(EXECUTABLE).desktop $(DATADIR)/applications/$(EXECUTABLE).desktop
 
 uninstall:
 	rm $(BINDIR)/$(EXECUTABLE)
+	rm $(BINDIR)/$(EXECUTABLE_CLI)
 	rm $(DATADIR)/pixmaps/$(EXECUTABLE).png
 	rm $(DATADIR)/applications/$(EXECUTABLE).desktop
 	rm $(LOCALEDIR)/*/LC_MESSAGES/$(EXECUTABLE).mo
@@ -59,6 +75,7 @@ clean:
 	rm -f resources/resource.o
 	rm -f locale/*/$(EXECUTABLE).mo
 	rm -f $(EXECUTABLE)
+	rm -f $(EXECUTABLE_CLI)
 	rm -f $(EXECUTABLE_WIN)
 	rm -rf $(EXECUTABLE).app
 
@@ -84,7 +101,7 @@ mac: all
  	\t<string>$(EXECUTABLE)</string>\n\
 \
 	\t<key>CFBundleGetInfoString</key>\n\
-	\t<string>$(EXECUTABLE) v0.20</string>\n\
+	\t<string>$(EXECUTABLE) v0.30</string>\n\
 \
 	\t<key>CFBundleIconFile</key>\n\
 	\t<string>$(EXECUTABLE).icns</string>\n\
@@ -93,7 +110,7 @@ mac: all
  	\t<string>net.sourceforge.divfixpp</string>\n\
 \
   	\t<key>CFBundleShortVersionString</key>\n\
- 	\t<string>v0.20</string>\n\
+ 	\t<string>v0.30</string>\n\
 \
   	\t<key>CFBundleInfoDictionaryVersion</key>\n\
  	\t<string>6.0</string>\n\

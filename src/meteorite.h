@@ -1,5 +1,6 @@
 /***********************************(GPL)********************************
-*   Meteorite is MKV/Matroska Video Repair Engine.                      *
+*   Meteorite is an MKV/Matroska Video Repair Engine.                   *
+*   Copyright (C) 2016  Andrew Barnert                                  *
 *   Copyright (C) 2009  Erdem U. Altinyurt                              *
 *                                                                       *
 *   This program is free software; you can redistribute it and/or       *
@@ -17,8 +18,7 @@
 *   if not, write to the Free Software Foundation, Inc.,                *
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA        *
 *                                                                       *
-*               home  : meteorite.sourceforge.net                       *
-*               email : spamjunkeater at gmail.com                      *
+*              home : https://github.com/abarnert/meteorite             *
 *************************************************************************/
 
 #include <iostream>
@@ -43,7 +43,7 @@
 #ifndef _meteorite_h_
 #define _meteorite_h_
 
-#define METEORITE_VERSION "0.20"
+#define METEORITE_VERSION "0.30"
 
 using namespace std;
 
@@ -185,18 +185,18 @@ struct Block{		//Block structure for read/store block informations. Structure do
 #define bfr_size 64*1024*1024	//64MB buffer
 class Meteorite{	//The main class of the poject_Meteorite
 	public:
-		Meteorite( wxGauge *WxGauge=NULL );
+		Meteorite();
 	protected:
-		wxGauge    *WxGauge;
+		//return indicate program live, false on kill req
+		virtual bool update_gauge( int percent ) = 0;
+		virtual void alert( string msg, string title ) = 0;
 
 		IDDB DB;
 		char four_cc[5];
-		bool update_gauge( int percent );
 		uint64_t filesize;
 
 	public:
 		void Init(void);
-		void SetGauge( wxGauge* );
 		uint32_t IDof( string name );
 		bool is_IDof( char* bfr, string name);
 		ID_Element* FindElementID( HeadIDs hid, char *bfr );

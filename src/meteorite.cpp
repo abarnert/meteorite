@@ -1,5 +1,6 @@
 /***********************************(GPL)********************************
-*   Meteorite is MKV/Matroska Video Repair Engine.                      *
+*   Meteorite is an MKV/Matroska Video Repair Engine.                   *
+*   Copyright (C) 2016  Andrew Barnert                                  *
 *   Copyright (C) 2009  Erdem U. Altinyurt                              *
 *                                                                       *
 *   This program is free software; you can redistribute it and/or       *
@@ -17,8 +18,7 @@
 *   if not, write to the Free Software Foundation, Inc.,                *
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA        *
 *                                                                       *
-*               home  : meteorite.sourceforge.net                       *
-*               email : spamjunkeater at gmail.com                      *
+*              home : https://github.com/abarnert/meteorite             *
 *************************************************************************/
 
 #include "meteorite.h"
@@ -748,41 +748,12 @@ void Block::Print( ){
 			cout << "\tFrames: " << Frames;
 		}
 
-Meteorite::Meteorite( wxGauge *WxGauge_ ){
+Meteorite::Meteorite(){
 	Init();
-	WxGauge = WxGauge_;
 	}
-void Meteorite::SetGauge( wxGauge *WxGauge_){
-	WxGauge = WxGauge_;
-}
 
 void Meteorite::Init(void){
 	filesize=0;
-	}
-bool Meteorite::update_gauge( int percent ){	//return indicate program live, false on kill req
-	if(WxGauge){
-		if( WxGauge->GetValue() != percent ){		//Checks value is changed or not
-			wxMutexGuiEnter();
-			WxGauge->SetValue( percent );
-			wxYield();
-			wxMutexGuiLeave();
-			}
-		}
-	else{
-//		wxString value;
-//		wxGetEnv( wxT("COLUMNS"), &value);
-//		std::cout << "\r" << value.ToAscii() << " "  << target_file.ToAscii() << "\t\%" << percent;
-		}
-
-	if( !wxThread::This()->IsMain() )							//Checks if functions is running on thread
-		if( wxThread::This()->TestDestroy() ){		//Checks if thread has termination request
-//			close_files(true);				//Releases files
-//			infile.close();
-//			outfile.close();
-//			MemoLogWriter(_("Operation stoped by user.\n"));
-			return false;
-			}
-	return true;
 	}
 
 uint32_t Meteorite::IDof( string name ){
@@ -1940,7 +1911,7 @@ bool Meteorite::Repair( string source, string target ){
 			TreeParserPrint( root );
 			string a = "ABCDEFGH";
 			cout << "Source: " << source << endl;
-			#if __WXMSW__
+			#ifdef __WIN32__
 			int found = source.find_last_of('\\');
 			#else
 			int found = source.find_last_of('/');
@@ -2039,7 +2010,7 @@ bool Meteorite::ClustersCopier( subElement* root, uint64_t SegmentStart, uint64_
 	subElement* MetaSeek_ptr= dynamic_cast< subElement* >(Get( root, IDof("SeekHead") ));
 	if ( MetaSeek_ptr == NULL ){
 		//Error here, what did I miss?
-		wxMessageBox( wxT("Error : There is no SeekHead located at file.\nProbably your file heavly damaged or using new versions of Matroska,\nthat doesn't supported by this program, yet.."), wxT("Different Matroska Format Detected"), wxOK|wxCENTER );
+		alert("Error : There is no SeekHead located at file.\nProbably your file heavly damaged or using new versions of Matroska,\nthat doesn't supported by this program, yet..", "Different Matroska Format Detected");
 		return false;
 		}
 	for( unsigned i = 0 ; i < MetaSeek_ptr->data.size() ; i++){

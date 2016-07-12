@@ -12,7 +12,7 @@
 
 Name:			meteorite
 Summary:		A program to repair broken MKV file streams
-Version:		0.20
+Version:		0.30
 Release:		1
 License:		GPL
 Group:			Productivity/Multimedia/Video/Editors and Convertors
@@ -52,6 +52,7 @@ dos2unix     docs/*
 %__install -dm 755 %{buildroot}%{_datadir}/applications
 %__rm -f %{buildroot}%{_datadir}/applications/%{name}.desktop
 %__install -D -s -m 755 %{name} %{buildroot}%{_bindir}/%{name}
+%__install -D -s -m 755 %{name}-cli %{buildroot}%{_bindir}/%{name}-cli
 %__install -D -m 644 resources/%{name}.ico %{buildroot}%{_datadir}/pixmaps/%{name}.ico
 %__cat > %{name}.desktop << EOF
 [Desktop Entry]
@@ -76,6 +77,7 @@ EOF
 %defattr(-,root,root)
 %doc docs/*
 %{_bindir}/%{name}
+%{_bindir}/%{name}-cli
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/pixmaps/%{name}.ico
 
@@ -85,3 +87,6 @@ EOF
 
 * Mon Jul 11 2016 Andrew Barnert 0.20
 - Revive dead project, get it building again.
+
+* Mon Jul 11 2016 Andrew Barnert 0.30
+- Create CLI version.

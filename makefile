@@ -10,6 +10,7 @@ MSGFMT = msgfmt
 SOURCES= src/MeteoriteApp.cpp\
 			src/MeteoriteGUI.cpp\
 			src/MeteoriteMain.cpp\
+			src/meteoritewx.cpp\
 			src/meteorite.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 DEPENDS=$(OBJECTS:.o=.d)

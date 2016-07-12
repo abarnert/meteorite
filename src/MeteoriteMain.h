@@ -12,7 +12,7 @@
 
 #include "MeteoriteApp.h"
 #include "MeteoriteGUI.h"
-#include "meteorite.h"
+#include "meteoritewx.h"
 #include <wx/dnd.h>
 #include <wx/file.h>
 #include <wx/filename.h>
@@ -24,7 +24,7 @@
 #include "../resources/meteorite-logo.hpp"
 #include "../resources/meteorite.xpm"
 
-class MeteoriteDialog: public MeteoriteGUI, Meteorite, wxThreadHelper
+class MeteoriteDialog: public MeteoriteGUI, MeteoriteWx, wxThreadHelper
 {
     public:
         MeteoriteDialog(wxDialog *dlg);

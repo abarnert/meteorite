@@ -185,18 +185,18 @@ struct Block{		//Block structure for read/store block informations. Structure do
 #define bfr_size 64*1024*1024	//64MB buffer
 class Meteorite{	//The main class of the poject_Meteorite
 	public:
-		Meteorite( wxGauge *WxGauge=NULL );
+		Meteorite();
 	protected:
-		wxGauge    *WxGauge;
+		//return indicate program live, false on kill req
+		virtual bool update_gauge( int percent ) = 0;
+		virtual void alert( string msg, string title ) = 0;
 
 		IDDB DB;
 		char four_cc[5];
-		bool update_gauge( int percent );
 		uint64_t filesize;
 
 	public:
 		void Init(void);
-		void SetGauge( wxGauge* );
 		uint32_t IDof( string name );
 		bool is_IDof( char* bfr, string name);
 		ID_Element* FindElementID( HeadIDs hid, char *bfr );

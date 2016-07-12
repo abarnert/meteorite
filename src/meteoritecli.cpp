@@ -1,5 +1,5 @@
 /***********************************(GPL)********************************
-*   Meteorite is MKV/Matroska Video Repair Engine.                      *
+*   Meteorite is an MKV/Matroska Video Repair Engine.                   *
 *   Copyright (C) 2016  Andrew Barnert                                  *
 *   Copyright (C) 2009  Erdem U. Altinyurt                              *
 *                                                                       *
@@ -18,8 +18,7 @@
 *   if not, write to the Free Software Foundation, Inc.,                *
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA        *
 *                                                                       *
-*               home  : meteorite.sourceforge.net                       *
-*               email : spamjunkeater at gmail.com                      *
+*              home : https://github.com/abarnert/meteorite             *
 *************************************************************************/
 
 #include "meteoritecli.h"
@@ -40,7 +39,7 @@ static string prefixify(string path, string prefix) {
 int main(int argc, char *argv[]) {
   // TODO: Real getopt_long-style interface
   if (argc == 1) {
-    cerr << "Usage: " << argv[0] << " FILENAME\n";
+    cerr << "Usage: " << argv[0] << " FILENAME [FILENAME]*\n";
     return 2;
   }
   MeteoriteCli cli;
@@ -51,12 +50,12 @@ int main(int argc, char *argv[]) {
     cerr << argv[arg] << ": Starting\n";
     if (cli.Repair(src, dst)) {
       cerr << "************************************************************\n"
-	   << "SUCCESS: src" << " -> " << dst << "\n"
+	   << "SUCCESS: " << src << " -> " << dst << "\n"
 	   << "************************************************************\n"
 	   << "\n";
     } else {
       cerr << "************************************************************\n"
-	   << "FAILURE: src" << " -> " << dst << "\n"
+	   << "FAILURE: " << src << " -> " << dst << "\n"
 	   << "************************************************************\n"
 	   << "\n";
     }

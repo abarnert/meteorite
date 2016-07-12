@@ -1,5 +1,6 @@
 /***********************************(GPL)********************************
-*   Meteorite is MKV/Matroska Video Repair Engine.                      *
+*   Meteorite is an MKV/Matroska Video Repair Engine.                   *
+*   Copyright (C) 2016  Andrew Barnert                                  *
 *   Copyright (C) 2009  Erdem U. Altinyurt                              *
 *                                                                       *
 *   This program is free software; you can redistribute it and/or       *
@@ -17,8 +18,7 @@
 *   if not, write to the Free Software Foundation, Inc.,                *
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA        *
 *                                                                       *
-*               home  : meteorite.sourceforge.net                       *
-*               email : spamjunkeater at gmail.com                      *
+*              home : https://github.com/abarnert/meteorite             *
 *************************************************************************/
 
 #include "meteorite.h"

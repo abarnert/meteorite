@@ -56,11 +56,13 @@ $(EXECUTABLE_WIN): $(OBJECTS) $(RESOURCE_OBJ)
 
 install:
 	install -D -m 755 $(EXECUTABLE) $(BINDIR)/$(EXECUTABLE)
+	install -D -m 755 $(EXECUTABLE_CLI) $(BINDIR)/$(EXECUTABLE_CLI)
 	install -D -m 644 resources/$(EXECUTABLE).png $(DATADIR)/pixmaps/$(EXECUTABLE).png
 	install -D -m 644 resources/$(EXECUTABLE).desktop $(DATADIR)/applications/$(EXECUTABLE).desktop
 
 uninstall:
 	rm $(BINDIR)/$(EXECUTABLE)
+	rm $(BINDIR)/$(EXECUTABLE_CLI)
 	rm $(DATADIR)/pixmaps/$(EXECUTABLE).png
 	rm $(DATADIR)/applications/$(EXECUTABLE).desktop
 	rm $(LOCALEDIR)/*/LC_MESSAGES/$(EXECUTABLE).mo
@@ -73,6 +75,7 @@ clean:
 	rm -f resources/resource.o
 	rm -f locale/*/$(EXECUTABLE).mo
 	rm -f $(EXECUTABLE)
+	rm -f $(EXECUTABLE_CLI)
 	rm -f $(EXECUTABLE_WIN)
 	rm -rf $(EXECUTABLE).app
 
@@ -98,7 +101,7 @@ mac: all
  	\t<string>$(EXECUTABLE)</string>\n\
 \
 	\t<key>CFBundleGetInfoString</key>\n\
-	\t<string>$(EXECUTABLE) v0.20</string>\n\
+	\t<string>$(EXECUTABLE) v0.30</string>\n\
 \
 	\t<key>CFBundleIconFile</key>\n\
 	\t<string>$(EXECUTABLE).icns</string>\n\
@@ -107,7 +110,7 @@ mac: all
  	\t<string>net.sourceforge.divfixpp</string>\n\
 \
   	\t<key>CFBundleShortVersionString</key>\n\
- 	\t<string>v0.20</string>\n\
+ 	\t<string>v0.30</string>\n\
 \
   	\t<key>CFBundleInfoDictionaryVersion</key>\n\
  	\t<string>6.0</string>\n\
